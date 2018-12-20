@@ -2,10 +2,11 @@ from jikanpy import Jikan
 from bs4 import BeautifulSoup
 import requests
 import matplotlib.pylab as plt
+from time import sleep
 
 jikan = Jikan()
 
-anime = jikan.search(search_type='anime', query='darlin in the franxx')
+anime = jikan.search(search_type='anime', query='sao')
 title = anime["results"][0]["title"]
 print(title)
 mal_id = anime["results"][0]["mal_id"]
@@ -18,7 +19,9 @@ for episode in jikan.anime(mal_id, extension="episodes")["episodes"]:
 
     url = episode["forum_url"] + "&pollresults=1"
     response = requests.get(url)
-    soup = BeautifulSoup(response.content)
+    sleep(3)
+    print(response.content)
+    soup = BeautifulSoup(response.content, "html.parser")
     results = soup.find_all('td')
 
     five_rating = int(results[2].text)
